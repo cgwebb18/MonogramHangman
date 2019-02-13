@@ -1,6 +1,6 @@
 //can_play tracks whether a player has won or lost
 var can_play = true;
-var answers = ["\u0050\u0045\u0054\u0052\u0055"];
+var answers = {"petru" :"\u0050\u0045\u0054\u0052\u0055", "eusebiou" : "\ue137\ue169"};
 
 $(function(){
   console.log(answers[0]);
