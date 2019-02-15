@@ -1,9 +1,48 @@
 //can_play tracks whether a player has won or lost
 var can_play = true;
-var answers = {"petru" :"\u0050\u0045\u0054\u0052\u0055", "eusebiou" : "\ue137\ue169"};
+
+
+// 'Peter': {
+//   english : 'Peter',
+//   ancient_name : "Petru",
+//   athena_ruby : "\u0050\u0045\u0054\u0052\u0055",
+//   layout : "Peter_Layout",
+//   img_url : '#TODO'
+// },
+
+// //seal class (might not be necessary unless each seal needs a function)
+// function Seal(label){
+//   // e_eq = english equivalent, a_nm = ancient name, ar = athena ruby, lyt = layout
+//   this.english = label.english;
+//   this.ancient = label.ancient_name;
+//   this.ar = label.athena_ruby;
+//   this.layout = label.layout;
+//   this.img_url = label.img_url;
+//
+//
+//
+// };
+
+function init_game(ans){
+  var keys = Object.keys(ans);
+  var label = keys[(keys.length * Math.random() << 0)];
+  //Remember to change the 0 to label once all layouts done
+  var seal = answers['Peter'];
+  usedLetters = [];
+  return seal;
+};
 
 $(function(){
-  console.log(answers[0]);
+  var usedLetters = [];
+  var s = init_game(answers);
+  var kb = $('#guess').keyboard({
+    layout : 'Peter_Layout',
+    alwaysOpen : true,
+    restrictInput : true,
+    change : function(event, keyboard, el){
+      console.log(el);
+    }
+  });
 });
 
 
