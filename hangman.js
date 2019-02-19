@@ -1,6 +1,6 @@
 //can_play tracks whether a player has won or lost
 var can_play = true;
-
+var lives = 5;
 
 // 'Peter': {
 //   english : 'Peter',
@@ -10,27 +10,48 @@ var can_play = true;
 //   img_url : '#TODO'
 // },
 
-// //seal class (might not be necessary unless each seal needs a function)
-// function Seal(label){
-//   // e_eq = english equivalent, a_nm = ancient name, ar = athena ruby, lyt = layout
-//   this.english = label.english;
-//   this.ancient = label.ancient_name;
-//   this.ar = label.athena_ruby;
-//   this.layout = label.layout;
-//   this.img_url = label.img_url;
-//
-//
-//
-// };
-
 function init_game(ans){
+  lives = 5;
   var keys = Object.keys(ans);
   var label = keys[(keys.length * Math.random() << 0)];
-  //Remember to change the 0 to label once all layouts done
+  //Remember to change 'Peter' to label once all layouts done
   var seal = answers['Peter'];
   usedLetters = [];
+  $('#seal').attr('src', seal.img_url);
   return seal;
 };
+
+function show_progress(ans, usedLs) {
+  var prog = '';
+  for (i = 0; i < ans.length; i++) {
+    if (usedLs.includes(ans[i])){
+      prog = prog + ans[i];
+    }
+    else{
+      prog = prog + '?';
+    }
+  }
+  return prog;
+};
+
+function lives_left(ans, usedLs){
+  var wrong = 0;
+  for (i=0; i < usedLs.length; i++){
+    if (!ans.includes(usedLs[i])) {
+      wrong = wrong + 1;
+    }
+  }
+  lives = 5 - wrong;
+  return lives
+};
+
+// var toggleKeysIfEmpty = function(kb) {
+//   var toggle = kb.$preview.val() === '';
+//   kb.$keyboard
+//     .find('.ui-keyboard-bksp, .ui-keyboard-accept')
+//     .toggleClass('disabled', toggle)
+//     .prop('disabled', toggle);
+// };
 
 $(function(){
   var usedLetters = [];
@@ -38,9 +59,19 @@ $(function(){
   var kb = $('#guess').keyboard({
     layout : 'Peter_Layout',
     alwaysOpen : true,
-    restrictInput : true,
-    change : function(event, keyboard, el){
-      console.log(el);
+    restrictInput : false,
+    change : function(e, kb, el){
+      kb.$keyboard.find(e.currentTarget)
+                  .css('opacity', 0.5);
+      $('#l-num').text(lives_left(s.athena_ruby, usedLetters));
+      if (lives_left(s.athena_ruby, usedLetters) < 1) {
+        alert('Game over!');
+      }
+    },
+    beforeInsert : function(e, kb, el, txt){
+      usedLetters.push(txt);
+      $.keyboard.keyaction.clear(kb);
+      return show_progress(s.athena_ruby, usedLetters);
     }
   });
 });

@@ -1,0 +1,11 @@
+h1, #seal {
+  height: auto;
+  width: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.ui-keyboard {
+  position: relative;
+}

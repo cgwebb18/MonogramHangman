@@ -7,6 +7,10 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.28.7/css/keyboard-basic.min.css" rel="stylesheet">
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/virtual-keyboard/1.28.7/js/jquery.keyboard.js"></script>
 
 	<script src="answers.js"></script>
@@ -15,16 +19,18 @@
 
 	<script src="hangman.js"></script>
 
+	<link href='hangman-style.css' rel='stylesheet'>
+
 </head>
 
 <body>
 
 
 	<h1>Monogram Hangman</h1>
+	<img src='#' id='seal' />
+	<div id='lives'>Lives: <span id='l-num'>5</span></div>
 
-	<img id='hanging' src="hangmen/hmstart.gif" height="125" width="75" name="hm">
-
-	<div id='answer'>Answer: <input id='guess' type="text" placeholder="?????"></div>
+	<input id='guess' type="text" placeholder="?????">
 
 
 	<button id='start'>Start game</button>

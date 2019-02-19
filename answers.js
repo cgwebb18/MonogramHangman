@@ -4,7 +4,7 @@ var answers = {
     ancient_name : "Petru",
     athena_ruby : "\u0050\u0045\u0054\u0052\u0055",
     layout : "Peter_Layout",
-    img_url : '#TODO'
+    img_url : 'seals/Petru.png'
   },
   'Eusebius_G': {
     english : 'Eusebius',
