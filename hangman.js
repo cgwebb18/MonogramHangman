@@ -1,5 +1,3 @@
-//can_play tracks whether a player has won or lost
-var can_play = true;
 var lives = 5;
 
 // 'Peter': {
@@ -12,10 +10,7 @@ var lives = 5;
 
 function init_game(ans){
   lives = 5;
-  var keys = Object.keys(ans);
-  var label = keys[(keys.length * Math.random() << 0)];
-  //Remember to change 'Peter' to label once all layouts done
-  var seal = answers['Peter'];
+  var seal = answers[ans];
   usedLetters = [];
   $('#seal').attr('src', seal.img_url);
   return seal;
@@ -45,28 +40,27 @@ function lives_left(ans, usedLs){
   return lives
 };
 
-// var toggleKeysIfEmpty = function(kb) {
-//   var toggle = kb.$preview.val() === '';
-//   kb.$keyboard
-//     .find('.ui-keyboard-bksp, .ui-keyboard-accept')
-//     .toggleClass('disabled', toggle)
-//     .prop('disabled', toggle);
-// };
-
 $(function(){
+  var url_prefix = 'https://www.doaks.org/resources/seals/byzantine-seals/';
   var usedLetters = [];
-  var s = init_game(answers);
+  var s = init_game('Peter');
   var kb = $('#guess').keyboard({
     layout : 'Peter_Layout',
     alwaysOpen : true,
     restrictInput : false,
     change : function(e, kb, el){
       kb.$keyboard.find(e.currentTarget)
-                  .css('opacity', 0.5);
+                  .css('opacity', 0.5)
+                  .prop('disabled', true);
       $('#l-num').text(lives_left(s.athena_ruby, usedLetters));
       if (lives_left(s.athena_ruby, usedLetters) < 1) {
         alert('Game over!');
       }
+      if(kb.getValue().indexOf('?') == -1) {
+        popupWindow = window.open((url_prefix + s.accession), 'answer', 'width=1500,height=1000');
+        popupWindow.focus();
+      }
+      console.log(kb.getValue());
     },
     beforeInsert : function(e, kb, el, txt){
       usedLetters.push(txt);
@@ -74,86 +68,5 @@ $(function(){
       return show_progress(s.athena_ruby, usedLetters);
     }
   });
+  $('#guess_keyboard').css('top', '60%');
 });
-
-
-// function selectLetter(l) {
-//   if (can_play == false) {
-//     return;
-//   }
-//
-//   if (used_letters.indexOf(l) != -1) {
-//     return;
-//   }
-//
-//   used_letters += l;
-//   document.game.usedLetters.value = used_letters;
-//
-//   if (answer.indexOf(l) != -1) {
-//     // correct letter guess
-//     pos = 0;
-//     temp_mask = display_word;
-//
-//
-//     while (answer.indexOf(l, pos) != -1) {
-//       pos = answer.indexOf(l, pos);
-//       end = pos + 1;
-//
-//       start_text = temp_mask.substring(0, pos);
-//       end_text = temp_mask.substring(end, temp_mask.length);
-//
-//       temp_mask = start_text + l + end_text;
-//       pos = end;
-//     }
-//
-//     display_word = temp_mask;
-//     document.game.displayWord.value = display_word;
-//
-//     if (display_word.indexOf("#") == -1) {
-//       // won
-//       alert("Well done, you have won!");
-//       can_play = false;
-//     }
-//   } else {
-//     // incortect letter guess
-//     wrong_guesses += 1;
-//     eval("document.hm.src=\"hm" + wrong_guesses + ".gif\"");
-//
-//     if (wrong_guesses == 10) {
-//       // lost
-//       alert("Sorry, you have lost!");
-//       can_play = false;
-//     }
-//   }
-// }
-//
-// function reset() {
-//   selectWord();
-//   document.game.usedLetters.value = "";
-//   used_letters = "";
-//   wrong_guesses = 0;
-//   document.hm.src = "hmstart.gif";
-// }
-//
-// function selectWord() {
-//   can_play = true;
-//   random_number = Math.round(Math.random() * (words.length - 1));
-//   answer = words[random_number];
-//   //document.game.theWord.value = answer;
-//
-//   // display masked word
-//   masked_word = createMask(answer);
-//   document.game.displayWord.value = masked_word;
-//   display_word = masked_word;
-// }
-//
-// function createMask(m) {
-//   mask = "";
-//   word_length = m.length;
-//
-//
-//   for (i = 0; i < word_lenght; i++) {
-//     mask += "#";
-//   }
-//   return mask;
-// }
