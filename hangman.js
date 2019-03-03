@@ -1,17 +1,9 @@
 var lives = 5;
+var ans_ks = Object.keys(answers);
 
-// 'Peter': {
-//   english : 'Peter',
-//   ancient_name : "Petru",
-//   athena_ruby : "\u0050\u0045\u0054\u0052\u0055",
-//   layout : "Peter_Layout",
-//   img_url : '#TODO'
-// },
-
-function init_game(ans){
+function init_game(a){
   lives = 5;
-  var seal = answers[ans];
-  usedLetters = [];
+  var seal = answers[ans_ks[a]];
   $('#seal').attr('src', seal.img_url);
   return seal;
 };
@@ -43,11 +35,34 @@ function lives_left(ans, usedLs){
 $(function(){
   var url_prefix = 'https://www.doaks.org/resources/seals/byzantine-seals/';
   var usedLetters = [];
-  var s = init_game('Peter');
+  var level = 0;
+  var s = init_game(level);
+  $.extend($.keyboard.keyaction, {
+    meta : function(base) {
+      base.$preview.val('');
+      console.log(s);
+      init_game(level);
+      usedLetters = [];
+      base.redraw(s.layout).caret('end');
+      $('#guess_keyboard').css('top', '60%');
+    },
+    next : function(base) {
+      base.$preview.val('');
+      level += 1;
+      s = init_game(level);
+      usedLetters = [];
+      base.redraw(s.layout).caret('end');
+      $('#guess_keyboard').css('top', '60%');
+    }
+  });
   var kb = $('#guess').keyboard({
-    layout : 'Peter_Layout',
+    layout : s.layout,
     alwaysOpen : true,
     restrictInput : false,
+    display: {
+      'meta' : 'retry',
+      'next' : 'next'
+    },
     change : function(e, kb, el){
       kb.$keyboard.find(e.currentTarget)
                   .css('opacity', 0.5)
@@ -56,11 +71,18 @@ $(function(){
       if (lives_left(s.athena_ruby, usedLetters) < 1) {
         alert('Game over!');
       }
-      if(kb.getValue().indexOf('?') == -1) {
+      if(show_progress(s.athena_ruby, usedLetters).indexOf('?') == -1) {
         popupWindow = window.open((url_prefix + s.accession), 'answer', 'width=1500,height=1000');
         popupWindow.focus();
+        kb.$keyboard.find($("button[data-value='next']"))
+                    .css('opacity', 1)
+                    .prop('disabled', false);
       }
-      console.log(kb.getValue());
+      if(show_progress(s.athena_ruby, usedLetters).indexOf('?') != -1) {
+        kb.$keyboard.find($("button[data-value='next']"))
+                    .css('opacity', 0.5)
+                    .prop('disabled', true);
+      }
     },
     beforeInsert : function(e, kb, el, txt){
       usedLetters.push(txt);
